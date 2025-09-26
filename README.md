@@ -19,7 +19,7 @@ The Slot Booking System is a MERN stack application that enables authorized club
 
 ### Frontend Architecture
 ```
-Client Layer (React.js + Vite)
+Client Layer (React.js + Vite + Tailwind CSS)
 ├── Component Layer (UI Components)
 ├── State Management (Zustand Stores)
 ├── API Service Layer (Axios)
