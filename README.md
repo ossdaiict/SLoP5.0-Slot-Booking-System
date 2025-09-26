@@ -76,7 +76,7 @@ npm run dev
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React.js, Vite, Zustand, Axios, React Router
+- **Frontend**: React.js, Vite, Zustand, Axios, React Router, Tailwind CSS
 - **Backend**: Node.js, Express.js, MongoDB, Mongoose
 - **Authentication**: JWT tokens
 - **State Management**: Zustand
