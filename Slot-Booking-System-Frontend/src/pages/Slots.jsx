@@ -82,7 +82,7 @@ const Slots = ({ user }) => {
   const canBook = user && (user.role === 'club_admin' || user.role === 'super_admin');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 pt-20 px-4 pb-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-wrap items-center justify-center pt-20">
       <div className="max-w-7xl mx-auto animate-fadeIn">
         {/* Header */}
         <div className="mb-8">
@@ -202,7 +202,9 @@ const Slots = ({ user }) => {
           </div>
         )}
       </div>
-      <Footer />
+      <div className='w-full mt-4'>
+        <Footer />
+      </div>
     </div>
   );
 };

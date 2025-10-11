@@ -53,7 +53,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-wrap items-center justify-center pt-20">
       <div className="w-full max-w-md animate-fadeIn">
         {/* Header */}
         <div className="text-center mb-8">
@@ -127,7 +127,7 @@ const Register = () => {
               />
             )}
 
-            <div className="relative">
+           <div>
               <Input
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
@@ -137,26 +137,36 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-              />
+              >
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                className="absolute right-3 top-[16px] text-gray-400 hover:text-gray-600 transition-colors duration-200"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
+              </Input>
             </div>
 
-            <Input
-              label="Confirm Password"
-              type={showPassword ? 'text' : 'password'}
-              name="confirmPassword"
-              placeholder="••••••••"
-              icon={Lock}
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
+            <div>
+              <Input
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                placeholder="••••••••"
+                icon={Lock}
+                value={formData.password}
+                onChange={handleChange}
+                required
+              >
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-[16px] text-gray-400 hover:text-gray-600 transition-colors duration-200"
+              >
+              </button>
+              </Input>
+            </div>
 
             <label className="flex items-start cursor-pointer group">
               <input
@@ -204,7 +214,9 @@ const Register = () => {
           </div>
         </Card>
       </div>
-      <Footer />
+      <div className='w-full mt-4'>
+        <Footer />
+      </div>
     </div>
   );
 };
