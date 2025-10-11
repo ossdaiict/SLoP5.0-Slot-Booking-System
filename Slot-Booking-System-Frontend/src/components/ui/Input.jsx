@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Children } from 'react';
 
 const Input = ({ 
   label, 
@@ -6,6 +6,7 @@ const Input = ({
   icon: Icon, 
   className = '', 
   containerClassName = '',
+  children,
   ...props 
 }) => {
   return (
@@ -33,6 +34,7 @@ const Input = ({
           `}
           {...props}
         />
+      <div>{children}</div>
       </div>
       {error && (
         <p className="mt-1.5 text-sm text-red-600 animate-fadeIn">
