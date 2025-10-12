@@ -46,7 +46,7 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-wrap items-center justify-center pt-20">
       <div className="w-full max-w-md animate-fadeIn">
         {/* Header */}
         <div className="text-center mb-8">
@@ -62,7 +62,7 @@ const Login = ({ onLogin }) => {
         </div>
 
         {/* Form Card */}
-        <Card className="p-8">
+        <Card className="p-8 w-100">
           {error && (
             <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg animate-fadeIn">
               <p className="text-red-700 text-sm font-medium">{error}</p>
@@ -91,20 +91,22 @@ const Login = ({ onLogin }) => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-              />
+              >
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                className="absolute right-3 top-[16px] text-gray-400 hover:text-gray-600 transition-colors duration-200"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
+              </Input>
             </div>
 
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center cursor-pointer group">
+              <label className="flex items-center cursor-pointer group" for="rememberMe">
                 <input
                   type="checkbox"
+                  id='rememberMe'
                   className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500 cursor-pointer"
                 />
                 <span className="ml-2 text-gray-700 group-hover:text-purple-600 transition-colors duration-200">
@@ -147,7 +149,9 @@ const Login = ({ onLogin }) => {
           </div>
         </Card>
       </div>
-      <Footer />
+      <div className='w-full mt-4'>
+        <Footer />
+      </div>
     </div>
   );
 };
