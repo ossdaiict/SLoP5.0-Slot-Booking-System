@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { Calendar, Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react';
 import Button from './Button';
 
@@ -10,6 +10,24 @@ const Navbar = ({ user, onLogout }) => {
   const handleLogout = () => {
     onLogout();
     navigate('/login');
+  };
+
+  // Active link styles for desktop
+  const getDesktopLinkClass = ({ isActive }) => {
+    return `px-4 py-2 font-medium transition-colors duration-200 ${
+      isActive 
+        ? 'text-white bg-black rounded-lg shadow-sm' 
+        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg'
+    }`;
+  };
+
+  // Active link styles for mobile
+  const getMobileLinkClass = ({ isActive }) => {
+    return `block px-4 py-2 rounded-lg transition-colors duration-200 ${
+      isActive 
+        ? 'text-gray-900 bg-gray-100 font-semibold' 
+        : 'text-gray-700 hover:bg-gray-50'
+    }`;
   };
 
   return (
@@ -28,26 +46,26 @@ const Navbar = ({ user, onLogout }) => {
 
           {/* Desktop Navigation */}
           {user ? (
-            <div className="hidden md:flex items-center gap-4">
-              <Link 
+            <div className="hidden md:flex items-center gap-2">
+              <NavLink 
                 to="/dashboard"
-                className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+                className={getDesktopLinkClass}
               >
                 Dashboard
-              </Link>
-              <Link 
+              </NavLink>
+              <NavLink 
                 to="/slots"
-                className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+                className={getDesktopLinkClass}
               >
                 Slots
-              </Link>
+              </NavLink>
               {(user.role === 'club_admin' || user.role === 'super_admin') && (
-                <Link 
+                <NavLink 
                   to="/bookings"
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+                  className={getDesktopLinkClass}
                 >
                   Bookings
-                </Link>
+                </NavLink>
               )}
               
               <div className="ml-4 pl-4 border-l border-gray-200 flex items-center gap-3">
@@ -60,13 +78,17 @@ const Navbar = ({ user, onLogout }) => {
                     <User className="w-5 h-5" />
                   </button>
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                    <Link
+                    <NavLink
                       to="/profile"
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-t-xl transition-colors duration-200"
+                      className={({ isActive }) => 
+                        `flex items-center gap-3 px-4 py-3 rounded-t-xl transition-colors duration-200 ${
+                          isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'
+                        }`
+                      }
                     >
                       <User className="w-4 h-4" />
                       <span className="text-sm font-medium">Profile</span>
-                    </Link>
+                    </NavLink>
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-b-xl transition-colors duration-200"
@@ -102,43 +124,43 @@ const Navbar = ({ user, onLogout }) => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden border-t border-gray-200 bg-white animate-fadeIn">
-          <div className="px-4 py-4 space-y-3">
+          <div className="px-4 py-4 space-y-2">
             {user ? (
               <>
                 <div className="pb-3 mb-3 border-b border-gray-200">
                   <p className="font-semibold text-gray-800">{user.name}</p>
                   <p className="text-sm text-gray-500 capitalize">{user.role.replace('_', ' ')}</p>
                 </div>
-                <Link
+                <NavLink
                   to="/dashboard"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                  className={getMobileLinkClass}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Dashboard
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                   to="/slots"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                  className={getMobileLinkClass}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Slots
-                </Link>
+                </NavLink>
                 {(user.role === 'club_admin' || user.role === 'super_admin') && (
-                  <Link
+                  <NavLink
                     to="/bookings"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                    className={getMobileLinkClass}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Bookings
-                  </Link>
+                  </NavLink>
                 )}
-                <Link
+                <NavLink
                   to="/profile"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                  className={getMobileLinkClass}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Profile
-                </Link>
+                </NavLink>
                 <button
                   onClick={() => {
                     handleLogout();
