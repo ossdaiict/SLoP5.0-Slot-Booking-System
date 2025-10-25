@@ -7,6 +7,10 @@ import Dashboard from './pages/Dashboard';
 import Slots from './pages/Slots';
 import Bookings from './pages/Bookings';
 import Profile from './pages/Profile';
+import Help from './pages/Help';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import Contact from './pages/Contact';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, user, requiredRole }) => {
@@ -105,6 +109,10 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/help" element={<Help />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/* Redirect */}
           <Route
