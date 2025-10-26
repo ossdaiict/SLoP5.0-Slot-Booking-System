@@ -11,6 +11,7 @@ import Help from './pages/Help';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Contact from './pages/Contact';
+import EditBooking from './pages/EditBooking';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, user, requiredRole }) => {
@@ -98,6 +99,14 @@ function App() {
             element={
               <ProtectedRoute user={user} requiredRole={['club_admin', 'super_admin']}>
                 <Bookings user={user} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bookings/edit/:id"
+            element={
+              <ProtectedRoute user={user} requiredRole={['club_admin', 'super_admin']}>
+                <EditBooking user={user} />
               </ProtectedRoute>
             }
           />
