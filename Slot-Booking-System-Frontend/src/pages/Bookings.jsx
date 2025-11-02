@@ -18,7 +18,8 @@ const Bookings = ({ user }) => {
       endTime: '12:00 PM',
       status: 'approved',
       club: 'Tech Club',
-      participants: 200
+      participants: 200,
+      userId: user?.id || user?._id || '1' // Current user's booking
     },
     {
       id: 2,
@@ -29,7 +30,8 @@ const Bookings = ({ user }) => {
       endTime: '09:00 PM',
       status: 'pending',
       club: 'Cultural Club',
-      participants: 500
+      participants: 500,
+      userId: '2' // Different user's booking
     },
     {
       id: 3,
@@ -38,11 +40,26 @@ const Bookings = ({ user }) => {
       date: '2024-03-25',
       startTime: '04:00 PM',
       endTime: '07:00 PM',
-      status: 'approved',
+      status: 'pending',
       club: 'Sports Club',
-      participants: 300
+      participants: 300,
+      userId: user?.id || user?._id || '1' // Current user's booking
     }
   ];
+
+  // Helper function to check if user can edit/delete a booking
+  const canEditDelete = (booking) => {
+    // Super admin can edit/delete any booking
+    if (user?.role === 'super_admin') {
+      return true;
+    }
+    
+    // Check if current user is the owner
+    const currentUserId = user?.id || user?._id;
+    const bookingUserId = booking.userId || booking.user?._id || booking.user?.id;
+    
+    return currentUserId && bookingUserId && currentUserId === bookingUserId;
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -153,7 +170,7 @@ const Bookings = ({ user }) => {
                 >
                   View
                 </Button>
-                {booking.status === 'pending' && (
+                {booking.status === 'pending' && canEditDelete(booking) && (
                   <>
                     <Button
                       variant="ghost"
