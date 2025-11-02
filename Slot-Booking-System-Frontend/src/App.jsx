@@ -12,6 +12,7 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Contact from './pages/Contact';
 import EditBooking from './pages/EditBooking';
+import NewBooking from './pages/NewBooking';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, user, requiredRole }) => {
@@ -99,6 +100,14 @@ function App() {
             element={
               <ProtectedRoute user={user} requiredRole={['club_admin', 'super_admin']}>
                 <Bookings user={user} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bookings/new"
+            element={
+              <ProtectedRoute user={user} requiredRole={['club_admin', 'super_admin']}>
+                <NewBooking user={user} />
               </ProtectedRoute>
             }
           />
