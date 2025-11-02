@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://ossdaiict.github.io/SLoP5.0-Slot-Booking-System/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
