@@ -103,7 +103,7 @@ const Login = ({ onLogin }) => {
             </div>
 
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center cursor-pointer group" for="rememberMe">
+              <label className="flex items-center cursor-pointer group" htmlFor="rememberMe">
                 <input
                   type="checkbox"
                   id='rememberMe'
