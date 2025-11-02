@@ -4,4 +4,5 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: '/SLoP5.0-Slot-Booking-System/', // Commented out for local development
 })

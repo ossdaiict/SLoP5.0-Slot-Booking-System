@@ -1,6 +1,29 @@
 {
+  "name": "slot-booking-system-monorepo",
+  "version": "1.0.0",
+  "description": "A comprehensive full-stack web application for managing event slot bookings",
+  "homepage": "https://ossdaiict.github.io/SLoP5.0-Slot-Booking-System/",
+  "scripts": {
+    "install-frontend": "cd Slot-Booking-System-Frontend && npm install",
+    "install-backend": "cd Slot-Booking-System-Backend && npm install",
+    "build": "cd Slot-Booking-System-Frontend && npm run build",
+    "dev-frontend": "cd Slot-Booking-System-Frontend && npm run dev",
+    "dev-backend": "cd Slot-Booking-System-Backend && npm run dev",
+    "predeploy": "npm run build",
+    "deploy": "cd Slot-Booking-System-Frontend && npm run deploy"
+  },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0"
-  }
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ossdaiict/SLoP5.0-Slot-Booking-System.git"
+  },
+  "keywords": ["slot-booking", "react", "nodejs", "mongodb", "university"],
+  "author": "OSSD DAIICT",
+  "license": "MIT"
 }
