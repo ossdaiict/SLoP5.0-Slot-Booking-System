@@ -5,6 +5,7 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Card from '../components/ui/Card';
 import Footer from '../components/ui/Footer';
+import { authAPI } from '../services/authAPI';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -32,6 +34,7 @@ const Register = () => {
 
   const validateField = (name, value) => {
     const newErrors = { ...errors };
+    setError(''); // Clear general error when field changes
 
     if (name === 'password') {
       if (!value) {
@@ -94,6 +97,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     // Final validation before submit
     const finalErrors = {};
@@ -102,7 +106,12 @@ const Register = () => {
     if (!formData.email.trim()) finalErrors.email = 'Email is required';
     if (!formData.password) finalErrors.password = 'Password is required';
     if (!formData.confirmPassword) finalErrors.confirmPassword = 'Please confirm your password';
-    if (formData.role === 'club_admin' && !formData.club.trim()) finalErrors.club = 'Club name is required';
+    if (formData.password !== formData.confirmPassword) {
+      finalErrors.confirmPassword = 'Passwords do not match';
+    }
+    if (formData.role === 'club_admin' && !formData.club.trim()) {
+      finalErrors.club = 'Club name is required';
+    }
 
     if (Object.keys(finalErrors).length > 0) {
       setErrors(finalErrors);
@@ -110,12 +119,52 @@ const Register = () => {
     }
 
     setLoading(true);
+    setErrors({});
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Prepare registration data
+      const registrationData = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        role: formData.role
+      };
+
+      // Add club only if role is club_admin
+      if (formData.role === 'club_admin') {
+        // Map club name to enum values expected by backend
+        // Backend expects: 'Technical Club', 'Cultural Club', 'Sports Club', 'Literary Club', 'Other'
+        const clubName = formData.club.trim();
+        // Try to match with existing clubs, or use 'Other'
+        const validClubs = ['Technical Club', 'Cultural Club', 'Sports Club', 'Literary Club', 'Other'];
+        const matchedClub = validClubs.find(club => 
+          club.toLowerCase() === clubName.toLowerCase()
+        ) || 'Other';
+        
+        registrationData.club = matchedClub;
+      }
+
+      // Call API
+      const response = await authAPI.register(registrationData);
+      
+      // Registration successful - redirect to login with success message
+      navigate('/login', { 
+        state: { message: 'Registration successful! Please login to continue.' } 
+      });
+    } catch (err) {
+      // Handle errors
+      const errorMessage = err.response?.data?.message || err.message || 'Registration failed. Please try again.';
+      setError(errorMessage);
+      
+      // Set field-specific errors if available
+      if (err.response?.data?.errors) {
+        setErrors(err.response.data.errors);
+      }
+      
+      console.error('Registration error:', err);
+    } finally {
       setLoading(false);
-      navigate('/login');
-    }, 1000);
+    }
   };
 
   const isFormValid = () => {
@@ -153,6 +202,12 @@ const Register = () => {
 
         {/* Form Card */}
         <Card className="p-8">
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg animate-fadeIn">
+              <p className="text-red-700 text-sm font-medium">{error}</p>
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <Input
@@ -199,16 +254,23 @@ const Register = () => {
 
             {formData.role === 'club_admin' && (
               <div>
-                <Input
-                  label="Club Name"
-                  type="text"
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Club Name
+                </label>
+                <select
                   name="club"
-                  placeholder="Enter your club name"
-                  icon={Building}
                   value={formData.club}
                   onChange={handleChange}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-4 focus:ring-purple-100 transition-all duration-200"
                   required
-                />
+                >
+                  <option value="">Select a club</option>
+                  <option value="Technical Club">Technical Club</option>
+                  <option value="Cultural Club">Cultural Club</option>
+                  <option value="Sports Club">Sports Club</option>
+                  <option value="Literary Club">Literary Club</option>
+                  <option value="Other">Other</option>
+                </select>
                 {errors.club && <p className="text-red-500 text-sm mt-1">{errors.club}</p>}
               </div>
             )}

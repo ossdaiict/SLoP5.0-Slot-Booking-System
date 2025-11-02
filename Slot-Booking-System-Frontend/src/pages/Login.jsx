@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, LogIn, CheckCircle } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Card from '../components/ui/Card';
@@ -13,8 +13,19 @@ const Login = ({ onLogin }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for success message from registration
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      // Clear state after showing message
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleChange = (e) => {
     setFormData({
@@ -29,20 +40,50 @@ const Login = ({ onLogin }) => {
     setLoading(true);
     setError('');
 
-    // Simulate API call
-    setTimeout(() => {
-      const mockUser = {
-        id: '1',
-        name: 'John Doe',
+    try {
+      const { authAPI } = await import('../services/authAPI');
+      const response = await authAPI.login({
         email: formData.email,
-        role: 'club_admin',
-        club: 'Tech Club'
-      };
+        password: formData.password
+      });
       
-      onLogin(mockUser);
-      setLoading(false);
+      // Handle different response structures
+      const responseData = response.data?.data || response.data;
+      const { user, token } = responseData;
+      
+      if (!user || !token) {
+        throw new Error('Invalid response from server');
+      }
+      
+      // Ensure user has _id for proper ownership checks
+      if (!user._id && user.id) {
+        user._id = user.id;
+      }
+      
+      // Store token and user
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      // Call onLogin to update App state
+      onLogin(user);
+      
+      // Navigate to dashboard
       navigate('/dashboard');
-    }, 1000);
+    } catch (err) {
+      // Handle specific error cases
+      if (err.response?.status === 401) {
+        setError('Invalid email or password. Please check your credentials and try again.');
+      } else if (err.response?.status === 404) {
+        setError('User not found. Please register first.');
+      } else if (err.code === 'ECONNREFUSED' || err.message?.includes('Network Error')) {
+        setError('Cannot connect to server. Please make sure the backend is running.');
+      } else {
+        setError(err.response?.data?.message || err.message || 'Login failed. Please try again.');
+      }
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,6 +104,12 @@ const Login = ({ onLogin }) => {
 
         {/* Form Card */}
         <Card className="p-8 w-100">
+          {successMessage && (
+            <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg animate-fadeIn flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-green-600" />
+              <p className="text-green-700 text-sm font-medium">{successMessage}</p>
+            </div>
+          )}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg animate-fadeIn">
               <p className="text-red-700 text-sm font-medium">{error}</p>

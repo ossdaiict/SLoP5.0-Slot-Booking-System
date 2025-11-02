@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "axios": "^1.13.1",
     "flowbite": "^3.1.2",
     "flowbite-react": "^0.12.9",
     "framer-motion": "^12.23.22",
