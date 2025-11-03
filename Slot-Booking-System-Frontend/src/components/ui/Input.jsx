@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React, { useId } from 'react';
 
 const Input = ({ 
   label, 
@@ -7,12 +7,22 @@ const Input = ({
   className = '', 
   containerClassName = '',
   children,
+  id,
+  name,
   ...props 
 }) => {
+  // Generate unique ID if not provided
+  // Priority: provided id > name prop > auto-generated
+  const autoId = useId();
+  const inputId = id || (name ? `input-${name}` : autoId);
+
   return (
     <div className={`w-full ${containerClassName}`}>
       {label && (
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
+        <label 
+          htmlFor={inputId}
+          className="block text-sm font-semibold text-gray-700 mb-2 cursor-pointer"
+        >
           {label}
         </label>
       )}
@@ -23,6 +33,8 @@ const Input = ({
           </div>
         )}
         <input
+          id={inputId}
+          name={name}
           className={`
             w-full px-4 py-3 ${Icon ? 'pl-11' : 'pl-4'} 
             border-2 border-gray-200 rounded-lg
